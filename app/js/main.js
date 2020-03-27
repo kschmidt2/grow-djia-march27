@@ -14,17 +14,18 @@
 
 Highcharts.setOptions({
     lang: {
-      thousandsSep: ','
+      thousandsSep: ',',
+      numericSymbols: [null, "M", "G", "T", "P", "E"]
     }
 });
 
-let chartId = document.getElementById("chart-container");
+let chartIdDJIAMarch27 = document.getElementById("chart-container-djia-march27");
 
 // checks for the chart ID and displays a backup image if the browser can't find it
 setTimeout(function() {
-    if(chartId.innerHTML === "") {
+    if(chartIdDJIAMarch27.innerHTML === "") {
         // console.log('noId');
-        let chartArea = document.getElementsByClassName("chart-area");
+        let chartArea = document.getElementsByClassName("chart-area-djia-march27");
         for(var i = 0; i < chartArea.length; i++) {
             chartArea[i].style.display = "none";
         } 
@@ -36,9 +37,9 @@ setTimeout(function() {
 },500);
 
 function drawHighcharts() {
-    Highcharts.chart(chartId, {
+    Highcharts.chart(chartIdDJIAMarch27, {
         chart: {
-            type: 'bar',
+            type: 'line',
             styledMode: true,
             spacingBottom: 25,
             spacingRight: 100,
@@ -48,37 +49,33 @@ function drawHighcharts() {
             text: null
         },
         data: {
-            googleSpreadsheetKey: '1YOKb5l2VM4aAB2r20N_1aT_1vEajYrP3U-U3A6lZbC0'
+            googleSpreadsheetKey: '1Holfy3hzKBJoQIVaNdN18txwAdXNm25nJQeIKkzqW1M'
         },
         // for bar charts only
-        plotOptions: {
-            series: {
-                groupPadding: 0.1
-            } 
-        },
-        // for line charts only
         // plotOptions: {
         //     series: {
-        //         lineWidth: 1,
-        //         // clip: false,
-        //         marker: {
-        //             enabled: false,
-        //             symbol: 'circle',
-        //             fillColor: '#ffffff',
-        //             states: {
-        //                 hover: {
-        //                     fillColor: '#ffffff'
-        //                 }
-        //             }
-        //         }
-        //     }
+        //         groupPadding: 0.1
+        //     } 
         // },
+        // for line charts only
+        plotOptions: {
+            series: {
+                lineWidth: 1,
+                // clip: false,
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    fillColor: '#ffffff',
+                    states: {
+                        hover: {
+                            fillColor: '#ffffff'
+                        }
+                    }
+                }
+            }
+        },
         legend: {
-            align: 'right',
-            symbolRadius: 0,
-            verticalAlign: 'top',
-            x: 10,
-            itemMarginTop: -10
+            enabled: false
         },
         xAxis: {
             labels: {
@@ -86,21 +83,40 @@ function drawHighcharts() {
                     whiteSpace: 'nowrap'
                 }
             },
-            tickLength: 5
+            dateTimeLabelFormats: {
+                week: '%b. %e',
+            },
+            tickLength: 5,
+            plotLines: [{
+                color: '#FF0000', // Red
+                width: 2,
+                value: 1581465600000,
+                label: {
+                    text: 'Start of<br>bear market',
+                    align: 'left',
+                    x: 5,
+                    y: 15,
+                    rotation: 0
+                }
+            }]
         },
         yAxis: {
             title: false,
             labels: {
                 useHTML: true,
                 overflow: 'allow'
-            }
+            },
+            min: 18000
         },
         credits: {
             enabled: false
         },
         tooltip: {
             shadow: false,
-            padding: 10
+            padding: 10,
+            formatter: function() {
+                console.log(this)
+            }
         },
         responsive: {
             rules: [{
